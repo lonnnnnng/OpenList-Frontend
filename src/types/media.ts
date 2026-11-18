@@ -115,6 +115,8 @@ export interface MediaScanPath {
   media_type: MediaType
   name: string
   path: string
+  /** STRM output directory override; blank uses the global STRM directory. */
+  strm_path?: string
   path_merge: boolean
   /**
    * 合并深度：0 = 自动；1 = 剧名（扫描根的直接子文件夹）下面的第一层作为条目

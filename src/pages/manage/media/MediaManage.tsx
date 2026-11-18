@@ -170,6 +170,9 @@ export const MediaManagePage = (props: MediaManagePageProps) => {
   const [editingScanPath, setEditingScanPath] =
     createSignal<Partial<MediaScanPath> | null>(null)
   const [scanPathSaving, setScanPathSaving] = createSignal(false)
+  const [generatingStrmPathId, setGeneratingStrmPathId] = createSignal<
+    number | null
+  >(null)
 
   // 扫描 / 刮削
   const [scanning, setScanning] = createSignal(false)
@@ -326,6 +329,7 @@ export const MediaManagePage = (props: MediaManagePageProps) => {
       media_type: props.mediaType,
       name: "",
       path: "/",
+      strm_path: "",
       path_merge: false,
       merge_depth: 0,
       type_tag: "",
@@ -359,6 +363,23 @@ export const MediaManagePage = (props: MediaManagePageProps) => {
       await loadScanPaths()
     } else {
       notify.error(t("media.admin.op_failed") + ": " + resp.message)
+    }
+  }
+
+  const handleGenerateStrmForScanPath = async (sp: MediaScanPath) => {
+    if (!sp.id) return
+    setGeneratingStrmPathId(sp.id)
+    const resp = await adminGenerateStrm(props.mediaType, sp.id)
+    setGeneratingStrmPathId(null)
+    if (resp.code === 200) {
+      notify.success(
+        t("media.admin.strm_ok", {
+          count: resp.data.written,
+          path: resp.data.path,
+        }),
+      )
+    } else {
+      notify.error(t("media.admin.strm_failed") + ": " + resp.message)
     }
   }
 
@@ -1105,7 +1126,7 @@ export const MediaManagePage = (props: MediaManagePageProps) => {
                         </Text>
                       </Td>
                       <Td>
-                        <HStack spacing="$1" flexWrap="nowrap">
+                        <HStack spacing="$1" flexWrap="wrap">
                           <Button
                             size="xs"
                             variant="ghost"
@@ -1113,6 +1134,15 @@ export const MediaManagePage = (props: MediaManagePageProps) => {
                             onClick={() => handleScanPath(sp)}
                           >
                             {t("media.admin.scan")}
+                          </Button>
+                          <Button
+                            size="xs"
+                            variant="ghost"
+                            colorScheme="accent"
+                            loading={generatingStrmPathId() === sp.id}
+                            onClick={() => handleGenerateStrmForScanPath(sp)}
+                          >
+                            {t("media.admin.generate_strm")}
                           </Button>
                           <Button
                             size="xs"
@@ -1566,6 +1596,22 @@ export const MediaManagePage = (props: MediaManagePageProps) => {
                 />
                 <FormHelperText>
                   {t("media.admin.scan_path_helper")}
+                </FormHelperText>
+              </FormControl>
+              <FormControl>
+                <FormLabel>{t("media.admin.strm_output_path")}</FormLabel>
+                <Input
+                  placeholder={t("media.admin.strm_output_path_placeholder")}
+                  value={editingScanPath()?.strm_path ?? ""}
+                  onInput={(e) =>
+                    setEditingScanPath((sp) => ({
+                      ...sp!,
+                      strm_path: e.currentTarget.value,
+                    }))
+                  }
+                />
+                <FormHelperText>
+                  {t("media.admin.strm_output_path_helper")}
                 </FormHelperText>
               </FormControl>
               <FormControl>

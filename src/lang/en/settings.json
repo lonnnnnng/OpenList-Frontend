@@ -114,7 +114,7 @@
   "media_strm_overwrite": "Overwrite existing STRM files",
   "media_strm_overwrite-tips": "Overwrite existing .strm files with the same name.",
   "media_strm_path": "STRM output directory",
-  "media_strm_path-tips": "STRM output directory (a writable VFS path). Only used when \"save next to media files\" is off.",
+  "media_strm_path-tips": "Default writable VFS directory for STRM files. A scan path can override this. Used when \"save next to media files\" is off.",
   "media_strm_same_dir": "Save STRM next to media files",
   "media_strm_same_dir-tips": "When on, .strm files are written next to the media file with the same name (only the extension differs); when off, they all go to the directory below.",
   "media_strm_template": "STRM content template",
