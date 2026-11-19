@@ -397,6 +397,15 @@
     "sign_url_expire-tips": "The expiration time for SAS URLs, in hours."
   },
   "BaiduNetdisk": {
+    "auth_type": "Login method",
+    "auth_types": {
+      "oauth": "OAuth refresh token",
+      "cookie": "Web Cookie (browse and play)"
+    },
+    "auth_type-tips": "OAuth uses a refresh token. Cookie login supports browsing, playback and media scans; uploading and modifying cloud files are unavailable. Cookie mode resolves a direct CDN link; keep Web proxy off to use 302 playback.",
+    "cookie": "Web Cookie",
+    "cookie-tips": "Sign in to pan.baidu.com, open the browser developer tools Network tab, and copy the complete Cookie request header value from an /api/list request. Paste the Cookie value, not the Request URL, bdstoken or refresh_token. Copy a new Cookie if the session expires.",
+    "refresh_token-tips": "Required for OAuth login only. Leave empty when using Cookie login.",
     "api_url_address": "Api url address",
     "client_id": "Client id",
     "client_secret": "Client secret",

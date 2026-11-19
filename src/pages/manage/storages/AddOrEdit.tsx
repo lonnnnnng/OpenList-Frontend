@@ -96,6 +96,23 @@ const AddOrEdit = () => {
   }
   const [storage, setStorage] = createStore<Storage>({} as Storage)
   const [addition, setAddition] = createStore<Addition>({})
+  const visibleAdditionItems = createMemo(() => {
+    const items = drivers()[storage.driver]?.additional ?? []
+    if (storage.driver !== "BaiduNetdisk") return items
+    if (addition.auth_type !== "cookie") {
+      return items.filter((item) => item.name !== "cookie")
+    }
+    return items.filter((item) =>
+      [
+        "auth_type",
+        "cookie",
+        "root_folder_path",
+        "order_by",
+        "order_direction",
+        "only_list_video_file",
+      ].includes(item.name),
+    )
+  })
   const [okLoading, ok] = useFetch((): PResp<{ id: number }> => {
     setStorage("addition", JSON.stringify(addition))
     return r.post(`/admin/storage/${id ? "update" : "create"}`, storage)
@@ -172,14 +189,26 @@ const AddOrEdit = () => {
               />
             )}
           </For>
-          <For each={drivers()[storage.driver].additional}>
+          <For each={visibleAdditionItems()}>
             {(item) => (
               <Item
                 {...item}
+                required={
+                  storage.driver === "BaiduNetdisk" &&
+                  ["cookie", "refresh_token"].includes(item.name)
+                    ? true
+                    : item.required
+                }
                 driver={storage.driver}
                 value={addition[item.name] as any}
                 onChange={(val: any) => {
                   setAddition(item.name, val)
+                  if (
+                    storage.driver === "BaiduNetdisk" &&
+                    item.name === "auth_type"
+                  ) {
+                    setStorage("web_proxy", val !== "cookie")
+                  }
                 }}
               />
             )}

@@ -1,5 +1,6 @@
 import * as i18n from "@solid-primitives/i18n"
 import { createResource, createSignal } from "solid-js"
+import { driverTranslations } from "./driver-translations"
 export { i18n }
 
 // glob search by Vite
@@ -64,7 +65,11 @@ const fetchDictionary = async (locale: Lang): Promise<Dictionary> => {
     // If not English, merge with English as fallback (English keys underneath, locale on top)
     if (locale !== "en") {
       const enDict = await fetchEnDict()
-      return { ...enDict, ...flatDict } as Dictionary
+      return {
+        ...enDict,
+        ...flatDict,
+        ...driverTranslations[locale],
+      } as Dictionary
     }
 
     return flatDict
