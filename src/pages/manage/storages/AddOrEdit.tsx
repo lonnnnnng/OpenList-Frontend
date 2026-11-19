@@ -97,7 +97,11 @@ const AddOrEdit = () => {
   const [storage, setStorage] = createStore<Storage>({} as Storage)
   const [addition, setAddition] = createStore<Addition>({})
   const visibleAdditionItems = createMemo(() => {
-    const items = drivers()[storage.driver]?.additional ?? []
+    const items = (drivers()[storage.driver]?.additional ?? []).filter(
+      (item) =>
+        (item.name !== "uc_resolution" || storage.driver === "UC") &&
+        (item.name !== "mobile_request_url" || storage.driver !== "UC"),
+    )
     if (storage.driver !== "BaiduNetdisk") return items
     if (addition.auth_type !== "cookie") {
       return items.filter((item) => item.name !== "cookie")
@@ -193,6 +197,11 @@ const AddOrEdit = () => {
             {(item) => (
               <Item
                 {...item}
+                help={
+                  storage.driver === "UC" && item.name === "cookie"
+                    ? "Cookie request header"
+                    : item.help
+                }
                 required={
                   storage.driver === "BaiduNetdisk" &&
                   ["cookie", "refresh_token"].includes(item.name)

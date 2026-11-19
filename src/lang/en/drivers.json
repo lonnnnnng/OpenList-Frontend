@@ -1484,7 +1484,18 @@
     },
     "root_folder_id": "Root folder id",
     "use_transcoding_address": "Use transcoding address",
-    "use_transcoding_address-tips": "You can watch the transcoded video and support 302 redirection"
+    "use_transcoding_address-tips": "Play UC cloud-transcoded HLS through OpenList. Both playlists and segments require the server proxy. The original download route may return a UC browser or membership prompt video for some accounts.",
+    "cookie-tips": "Sign in to drive.uc.cn and copy the complete Cookie request header value from a pc-api.uc.cn /1/clouddrive/file/sort request. Combine multiple Cookie headers with semicolons. Refresh this value when login expires; no mobile request URL is required.",
+    "uc_resolution": "Transcoding resolution",
+    "uc_resolution-tips": "Auto selects the highest resolution available to this account. An unavailable fixed resolution reports an error; switch to Auto.",
+    "uc_resolutions": {
+      "auto": "Auto (best available)",
+      "low": "Low",
+      "high": "High",
+      "super": "Super",
+      "2k": "2K",
+      "4k": "4K"
+    }
   },
   "UCTV": {
     "device_id": "Device id",
