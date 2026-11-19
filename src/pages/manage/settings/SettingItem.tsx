@@ -28,6 +28,7 @@ export type ItemProps = SettingItem & {
   onDelete?: () => void
   hideLabel?: boolean
   w?: string
+  password?: boolean
   /** 由父组件控制的只读状态（例如依赖其它设置项时） */
   readOnly?: boolean
 }
@@ -57,7 +58,13 @@ const Item = (props: ItemProps) => {
       <Switch fallback={<Center>{t("settings_other.unknown_type")}</Center>}>
         <Match when={[Type.String, Type.Number].includes(props.type)}>
           <Input
-            type={props.type === Type.Number ? "number" : ""}
+            type={
+              props.password
+                ? "password"
+                : props.type === Type.Number
+                  ? "number"
+                  : ""
+            }
             id={props.key}
             value={props.value}
             onInput={(e) => props.onChange?.(e.currentTarget.value)}

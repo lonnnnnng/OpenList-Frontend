@@ -18,6 +18,8 @@ export interface CommonSettingsProps {
   group: Group
   /** 只渲染指定的设置项（不传则渲染整个分组），用于把媒体库设置拆成多个页面 */
   keys?: string[]
+  /** 将指定字符串设置项渲染为密码输入 */
+  passwordKeys?: string[]
   /** 根据其它设置项的当前值决定某一项是否只读 */
   readOnlyKey?: (key: string, all: SettingItem[]) => boolean
 }
@@ -56,6 +58,7 @@ const CommonSettings = (props: CommonSettingsProps) => {
           {(item) => (
             <Item
               {...item()}
+              password={props.passwordKeys?.includes(item().key) === true}
               readOnly={props.readOnlyKey?.(item().key, settings) === true}
               onChange={(val) => {
                 setSettings((i) => item().key === i.key, "value", val)
